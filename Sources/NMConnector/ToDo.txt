@@ -1,0 +1,7 @@
+To-Do:
+[ ] Be able to talk to NetworkManager
+[-] Be able to have our library linked with D-Bus (Inter-Process Communication)
+[ ] Create VPN connections
+[ ] Delete VPN connections
+[ ] Modify VPN connections, if there are any changes provided
+[ ] Fetch Network connections and filter them out for VPNs

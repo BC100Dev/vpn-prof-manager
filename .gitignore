@@ -32,7 +32,6 @@ bin/
 .DS_Store
 
 ### Build + CLion + CMake ###
-build*
-Build*
 Output*
-cmake-build*
+Build-*-Debug*
+Build-*-Release*
