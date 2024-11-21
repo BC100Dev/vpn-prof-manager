@@ -1,0 +1,28 @@
+[
+    {
+        "group": {
+            "label": "Surfshark",
+            "display": "Surfshark VPN",
+            "identifier": "FF2A88C9EEF5",
+            "sub_group": null
+        },
+        "connections": []
+    },
+    {
+        "group": {
+            "label": "Surfshark_US",
+            "display": "United States",
+            "identifier": "FF2A88C9EEF6",
+            "sub_group": "FF2A88C9EEF5"
+        },
+        "connections": [
+            {
+                "label": "US-DEL",
+                "display": "Deltaware",
+                "identifier": "FF2A88AAEE00",
+                "protocol": "udp",
+                "file": "us-del_surfsharl"
+            }
+        ]
+    }
+]

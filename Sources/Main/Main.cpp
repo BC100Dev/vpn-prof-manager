@@ -4,31 +4,37 @@
 #include <vector>
 #include <string>
 
-int main(int argc, char **argv, char **envMap) {
+#include "FunctionCaller.hpp"
+
+void helpPls() {
+    std::cout << "VPN Profile Manager" << std::endl << std::endl;
+    std::cout << "Commands:" << std::endl;
+
+    HelpPage page;
+    page.addArg("create", "", "Operates on creation of profiles and VPNs");
+    page.addArg("load", "", "Loads in configuration files into a particular namespace (Profiles / VPNs)");
+    page.addArg("apply", "", "Applies the configurations to NetworkManager");
+    page.addArg("remove", "", "Removes VPN / Profile Information");
+    page.addArg("list", "", "Lists profiles and VPNs");
+    page.addArg("info", "", "Displays information about a VPN and/or Profile(s)");
+    page.addArg("change", "", "Changes configurations about a VPN and Profiles");
+    page.setStartSpaceWidth(3);
+    page.setSpaceWidth(5);
+    page.display(std::cout);
+}
+
+int main(int argc, char **c_argv) {
     std::vector<std::string> args;
 
     if (argc != 1) {
         args = std::vector<std::string>(argc - 1);
 
         for (int i = 1; i < argc; i++)
-            args[i - 1] = argv[i];
+            args[i - 1] = c_argv[i];
     }
 
     if (args.empty()) {
-        std::cout << "VPN Profile Manager" << std::endl << std::endl;
-        std::cout << "Commands:" << std::endl;
-
-        HelpPage page;
-        page.addArg("create", "", "Operates on creation of profiles and VPNs");
-        page.addArg("load", "", "Loads in configuration files into a particular namespace (Profiles / VPNs)");
-        page.addArg("apply", "", "Applies the configurations to NetworkManager");
-        page.addArg("remove", "", "Removes VPN / Profile Information");
-        page.addArg("list", "", "Lists profiles and VPNs");
-        page.addArg("info", "", "Displays information about a VPN and/or Profile(s)");
-        page.setStartSpaceWidth(3);
-        page.setSpaceWidth(5);
-        page.display(std::cout);
-
+        helpPls();
         return 0;
     } else if (args.size() == 1) {
         HelpPage page;
@@ -65,11 +71,29 @@ int main(int argc, char **argv, char **envMap) {
         } else if (args[0] == "info") {
             page.addArg("info vpn [identifier]", "", "Displays the VPN configuration");
             page.addArg("info profile [identifier]", "", "Displays the Profile configuration");
+        } else if (args[0] == "change") {
+            page.addArg("change vpn [key] [value]", "",
+                        "Changes a specific name of the key with a corresponding value for the VPN");
+            page.addArg("change profile [key] [value]", "",
+                        "Changes a specific name of the key with a corresponding value for the Profile");
+            page.addArg("", "", "-- use \"--list-keys\" to view all available keys");
+        } else if (args[0] == "--help") {
+            helpPls();
+            return 0;
         }
 
         page.display(std::cout);
         return 1;
     }
+
+    if (!Application::Commands::HasCommand(args[0])) {
+        std::cerr << "VPN-Profile Manager: " << args[0] << " not found" << std::endl;
+        std::cerr << "See \"vpn-prof-manager --help\" for commands" << std::endl;
+        return 1;
+    }
+
+    std::vector<std::string> argv(args.begin() + 1, args.end());
+    Application::Commands::functions[args[0]](argv);
 
     return 0;
 }
